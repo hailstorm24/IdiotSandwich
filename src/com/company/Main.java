@@ -22,6 +22,7 @@ public class Main implements Runnable, KeyListener {
     public BufferStrategy bufferStrategy;
     public Graphics2D g;
     public boolean startScreen = true;
+    public boolean cookScreen = false;
 
 
     public static void main(String[] args) {
@@ -99,12 +100,20 @@ public class Main implements Runnable, KeyListener {
         g.drawRect(100,100,100,100);
     }
 
+    public void renderCookScreen() {
+        g.drawRect(100,100,100,100);
+    }
 
     private void render() {
         g.clearRect(0, 0, frame.getWidth(), frame.getHeight());
 
         if(startScreen){
             renderStartScreen();
+        }
+        g.dispose();
+
+        if(cookScreen){
+           renderCookScreen();
         }
         g.dispose();
 
