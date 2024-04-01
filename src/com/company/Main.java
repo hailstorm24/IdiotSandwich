@@ -16,8 +16,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.util.ArrayList;
-
-
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class Main implements Runnable, KeyListener, MouseListener {
@@ -36,6 +36,26 @@ public class Main implements Runnable, KeyListener, MouseListener {
     public Image StartScreen;
     public Image CookScreen;
 
+    public Image baguette;
+    public Image cheese;
+    public Image ham;
+    public Image honey_mustard;
+    public Image lettuce;
+    public Image mayo;
+    public Image pancake;
+    public Image salami;
+    public Image tomato;
+    public Image turkey;
+    public Image waffle;
+    public Image white_bread;
+    public Image wheat_bread;
+    public Image onion;
+    public Image pickles;
+
+    Map<String, Image> dictionary = new HashMap<>();
+
+
+
     public Rectangle mouseRec;
 
 
@@ -50,14 +70,47 @@ public class Main implements Runnable, KeyListener, MouseListener {
     }
 
     public Main() throws IOException {
-        StartScreen = ImageIO.read(new File(new File(".").getAbsolutePath() + "/start_screen.png"));
-        CookScreen = ImageIO.read(new File(new File(".").getAbsolutePath() +"/kitchen-21.png"));
-        ingredientsInSandwich.add("Tomatoes");
-        ingredientsInSandwich.add("Tomatoes");
-
+        defineImages();
+        ingredientsInSandwich.add("lettuce");
 //        System.out.println(gordonMessage(ingredientsInSandwich));
         setUpGraphics();
 
+    }
+
+    public void defineImages() throws IOException {
+        StartScreen = ImageIO.read(new File(new File(".").getAbsolutePath() + "/start_screen.png"));
+        CookScreen = ImageIO.read(new File(new File(".").getAbsolutePath() +"/kitchen-21.png"));
+        baguette = ImageIO.read(new File(new File(".").getAbsolutePath() + "/baguette.png"));
+        cheese = ImageIO.read(new File(new File(".").getAbsolutePath() + "/cheese.png"));
+        ham = ImageIO.read(new File(new File(".").getAbsolutePath() + "/ham.png"));
+        honey_mustard = ImageIO.read(new File(new File(".").getAbsolutePath() + "/honey_mustard.png"));
+        lettuce = ImageIO.read(new File(new File(".").getAbsolutePath() + "/lettuce.png"));
+        mayo = ImageIO.read(new File(new File(".").getAbsolutePath() + "/mayo.png"));
+        pancake = ImageIO.read(new File(new File(".").getAbsolutePath() + "/pancake.png"));
+        salami = ImageIO.read(new File(new File(".").getAbsolutePath() + "/salami.png"));
+        tomato = ImageIO.read(new File(new File(".").getAbsolutePath() + "/tomato.png"));
+        turkey = ImageIO.read(new File(new File(".").getAbsolutePath() + "/turkey.png"));
+        waffle = ImageIO.read(new File(new File(".").getAbsolutePath() + "/waffle.png"));
+        white_bread = ImageIO.read(new File(new File(".").getAbsolutePath() + "/white_bread.png"));
+        wheat_bread = ImageIO.read(new File(new File(".").getAbsolutePath() + "/whole_wheat_bread.png"));
+        onion = ImageIO.read(new File(new File(".").getAbsolutePath() + "/onion-22.png"));
+        pickles = ImageIO.read(new File(new File(".").getAbsolutePath() + "/pickles.png"));
+
+        dictionary.put("pickle", pickles);
+        dictionary.put("cheese", cheese);
+        dictionary.put("lettuce", lettuce);
+        dictionary.put("tomato", tomato);
+        dictionary.put("onion", onion);
+        dictionary.put("ham", ham);
+        dictionary.put("turkey", turkey);
+        dictionary.put("salami", salami);
+        dictionary.put("honey mustard", honey_mustard);
+        dictionary.put("mayo", mayo);
+        dictionary.put("pancake bread", pancake);
+        dictionary.put("grainy bread", wheat_bread);
+        dictionary.put("wonder bread", white_bread);
+        dictionary.put("bubble bread", baguette);
+        dictionary.put("waffle bread", waffle);
     }
 
     public void run() {
@@ -157,20 +210,11 @@ public class Main implements Runnable, KeyListener, MouseListener {
     public void renderCookScreen() {
         g.clearRect(0, 0, frame.getWidth(), frame.getHeight());
         g.drawImage(CookScreen, 0,0,1000, 700,null);
-
-//        int boxWidth = (frame.getWidth() - 510) / 3;
-//        int boxHeight = frame.getHeight() / 5;
-//
-//        for (int row = 0; row < 5; row++) {
-//            for (int col = 0; col < 3; col++) {
-//                int x = 510 + col * boxWidth;
-//                int y = row * boxHeight;
-//                g.drawRect(x, y, boxWidth, boxHeight);
-//            }
-//        }
-//
-//        g.drawLine(508, 0, 508, frame.getHeight());
-
+        int ypos = 300;
+        for (Object item:ingredientsInSandwich){
+            g.drawImage(dictionary.get((String)item),0,ypos,750,525,null);
+            ypos-=50;
+        }
     }
 
     public void renderJudgeScreen() {
@@ -185,7 +229,6 @@ public class Main implements Runnable, KeyListener, MouseListener {
             renderStartScreen();
         }
         if(cookScreen){
-//            g.drawImage(CookScreen, 0,0,1000, 700,null);
             renderCookScreen();
         }
         if(finalScreen){
@@ -214,7 +257,7 @@ public class Main implements Runnable, KeyListener, MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if(startScreen) {
+        if (startScreen) {
             System.out.println("oooo");
             int xhold = e.getX();
             int yhold = e.getY();
@@ -222,6 +265,70 @@ public class Main implements Runnable, KeyListener, MouseListener {
             this.mouseRec = new Rectangle(xhold, yhold, 1, 1);
             this.startScreen = false;
             this.cookScreen = true;
+        }
+        if (cookScreen) {
+            int x = e.getX();
+            int y = e.getY();
+            if (x < 1000 && x > 880 && y < 140 && y > 0) {
+                ingredientsInSandwich.add("wonder bread");
+                System.out.println("wonder bread");
+            }
+            if (x < 1000 && x > 880 && y < 280 && y > 140) {
+                ingredientsInSandwich.add("bubble bread");
+                System.out.println("bubble bread");
+            }
+            if (x < 1000 && x > 880 && y < 420 && y > 280) {
+                ingredientsInSandwich.add("grainy bread");
+                System.out.println("grainy bread");
+            }
+            if (x < 1000 && x > 880 && y < 560 && y > 420) {
+                ingredientsInSandwich.add("waffle bread");
+                System.out.println("waffle bread");
+            }
+            if (x < 1000 && x > 880 && y < 700 && y > 560) {
+                ingredientsInSandwich.add("pancake bread");
+                System.out.println("pancake bread");
+            }
+            if (x < 880 && x > 760 && y < 140 && y > 0) {
+                ingredientsInSandwich.add("honey mustard");
+                System.out.println("honey mustard");
+            }
+            if (x < 880 && x > 760 && y < 280 && y > 140) {
+                ingredientsInSandwich.add("mayo");
+                System.out.println("mayo");
+            }
+            if (x < 880 && x > 760 && y < 420 && y > 280) {
+                ingredientsInSandwich.add("salami");
+                System.out.println("salami");
+            }
+            if (x < 880 && x > 760 && y < 560 && y > 420) {
+                ingredientsInSandwich.add("turkey");
+                System.out.println("turkey");
+            }
+            if (x < 880 && x > 760 && y < 700 && y > 560) {
+                ingredientsInSandwich.add("ham");
+                System.out.println("ham");
+            }
+            if (x < 760 && x > 640 && y < 140 && y > 0) {
+                ingredientsInSandwich.add("onion");
+                System.out.println("onion");
+            }
+            if (x < 760 && x > 640 && y < 280 && y > 140) {
+                ingredientsInSandwich.add("tomato");
+                System.out.println("tomato");
+            }
+            if (x < 760 && x > 640 && y < 420 && y > 280) {
+                ingredientsInSandwich.add("cheese");
+                System.out.println("cheese");
+            }
+            if (x < 760 && x > 640 && y < 560 && y > 420) {
+                ingredientsInSandwich.add("pickle");
+                System.out.println("pickle");
+            }
+            if (x < 760 && x > 640 && y < 700 && y > 560) {
+                ingredientsInSandwich.add("lettuce");
+                System.out.println("lettuce");
+            }
         }
     }
 
