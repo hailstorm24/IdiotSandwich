@@ -2,7 +2,13 @@ package com.company;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import javax.swing.*;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.FontMetrics;
+import java.awt.Rectangle;
 
+import java.awt.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -52,6 +58,8 @@ public class Main implements Runnable, KeyListener, MouseListener {
     public Image onion;
     public Image pickles;
 
+    public Image yelp;
+
     Map<String, Image> dictionary = new HashMap<>();
 
 
@@ -71,8 +79,6 @@ public class Main implements Runnable, KeyListener, MouseListener {
 
     public Main() throws IOException {
         defineImages();
-        ingredientsInSandwich.add("lettuce");
-//        System.out.println(gordonMessage(ingredientsInSandwich));
         setUpGraphics();
 
     }
@@ -80,6 +86,8 @@ public class Main implements Runnable, KeyListener, MouseListener {
     public void defineImages() throws IOException {
         StartScreen = ImageIO.read(new File(new File(".").getAbsolutePath() + "/start_screen.png"));
         CookScreen = ImageIO.read(new File(new File(".").getAbsolutePath() +"/kitchen-21.png"));
+        yelp = ImageIO.read(new File(new File(".").getAbsolutePath() +"/yelp_review.png"));
+
         baguette = ImageIO.read(new File(new File(".").getAbsolutePath() + "/baguette.png"));
         cheese = ImageIO.read(new File(new File(".").getAbsolutePath() + "/cheese.png"));
         ham = ImageIO.read(new File(new File(".").getAbsolutePath() + "/ham.png"));
@@ -163,6 +171,29 @@ public class Main implements Runnable, KeyListener, MouseListener {
         System.out.println("DONE graphic setup");
     }
 
+    public void drawWrappedText(Graphics g, String text, int x, int y, int width) {
+        Graphics2D g2d = (Graphics2D) g;
+        FontMetrics fm = g2d.getFontMetrics();
+        int lineHeight = fm.getHeight();
+
+        int curX = x;
+        int curY = y + lineHeight;
+
+        String[] words = text.split(" ");
+        for (String word : words) {
+            // Check if adding the next word exceeds the width
+            int wordWidth = fm.stringWidth(word + " ");
+            if (curX + wordWidth >= x + width) {
+                // Move to the next line if the word exceeds the current line width
+                curX = x;
+                curY += lineHeight;
+            }
+            g2d.drawString(word, curX, curY);
+            curX += wordWidth;
+        }
+    }
+
+
 
     public String queryGptApi(String prompt) {
         // Your API key from OpenAI
@@ -211,14 +242,19 @@ public class Main implements Runnable, KeyListener, MouseListener {
         g.clearRect(0, 0, frame.getWidth(), frame.getHeight());
         g.drawImage(CookScreen, 0,0,1000, 700,null);
         int ypos = 300;
-        for (Object item:ingredientsInSandwich){
-            g.drawImage(dictionary.get((String)item),0,ypos,750,525,null);
-            ypos-=50;
+        ArrayList tempIngredients = new ArrayList<String>(ingredientsInSandwich);
+
+        for (Object item : tempIngredients) {
+            g.drawImage(dictionary.get((String)item), 0, ypos, 750, 525, null);
+            ypos -= 50;
         }
     }
 
+
     public void renderJudgeScreen() {
-        g.drawRect(100,100,100,100);}
+        g.drawImage(yelp, 0,0,1000, 700,null);
+        drawWrappedText(g, gordonMessage, 300, 250, 400);
+    }
 
     private void render() {
         Graphics2D g = (Graphics2D)this.bufferStrategy.getDrawGraphics();
@@ -258,10 +294,8 @@ public class Main implements Runnable, KeyListener, MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
         if (startScreen) {
-            System.out.println("oooo");
             int xhold = e.getX();
             int yhold = e.getY();
-            System.out.println(xhold);
             this.mouseRec = new Rectangle(xhold, yhold, 1, 1);
             this.startScreen = false;
             this.cookScreen = true;
@@ -328,6 +362,11 @@ public class Main implements Runnable, KeyListener, MouseListener {
             if (x < 760 && x > 640 && y < 700 && y > 560) {
                 ingredientsInSandwich.add("lettuce");
                 System.out.println("lettuce");
+            }
+            if (x < 140 && x > 30 && y < 680 && y > 610) {
+                cookScreen = false;
+                finalScreen = true;
+                gordonMessage = gordonMessage(ingredientsInSandwich);
             }
         }
     }
