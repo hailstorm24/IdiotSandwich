@@ -97,11 +97,16 @@ public class Main implements Runnable, KeyListener {
     }
 
     public void renderStartScreen(){
-        g.drawRect(100,100,100,100);
+        for (int x = 0; x < 500; x += 180) {
+            for (int y = 0; y < 700; y += 150) {
+                g.drawRect(100 + x, 0 + y, 100, 100);
+            }
+        }
     }
 
     public void renderCookScreen() {
         g.drawRect(100,100,100,100);
+
     }
 
     private void render() {
