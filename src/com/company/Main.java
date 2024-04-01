@@ -1,5 +1,5 @@
 package com.company;
-
+//things
 import java.awt.Graphics2D;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
