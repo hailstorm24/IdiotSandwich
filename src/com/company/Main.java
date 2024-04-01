@@ -362,7 +362,23 @@ public class Main implements Runnable, KeyListener, MouseListener {
                 finalScreen = true;
                 gordonMessage = gordonMessage(ingredientsInSandwich);
             }
+            if (x < 125 && x > 25 && y < 150 && y > 25 && ingredientsInSandwich.size()>0) {
+                ingredientsInSandwich.remove(ingredientsInSandwich.size() - 1);
+            }
+
         }
+        if (finalScreen) {
+            int x = e.getX();
+            int y = e.getY();
+            System.out.println(x+" "+y);
+            if(x < 200 && x > 30 && y < 630 && y > 580){
+                startScreen = true;
+                finalScreen = false;
+                gordonMessage = "";
+                ingredientsInSandwich = new ArrayList<>();
+            }
+        }
+
     }
 
     @Override
