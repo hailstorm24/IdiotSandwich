@@ -7,6 +7,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 import java.awt.*;
+import javax.swing.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -117,9 +118,15 @@ public class Main implements Runnable, KeyListener {
             for (int y = 0; y < 700; y += 150) {
                 g.drawRect(100 + x, 0 + y, 100, 100);
             }
-        }
 
+        }
     }
+
+
+
+
+
+
 
     public void renderJudgeScreen() {
         g.drawRect(100,100,100,100);}
@@ -133,7 +140,7 @@ public class Main implements Runnable, KeyListener {
         g.dispose();
 
         if(cookScreen){
-           renderCookScreen();
+
         }
         g.dispose();
 
