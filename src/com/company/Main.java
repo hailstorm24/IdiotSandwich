@@ -1,5 +1,4 @@
 package com.company;
-//things
 import java.awt.Graphics2D;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -9,10 +8,7 @@ import java.awt.image.BufferStrategy;
 import java.awt.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
 import java.util.ArrayList;
-
-
 
 
 public class Main implements Runnable, KeyListener {
@@ -28,6 +24,8 @@ public class Main implements Runnable, KeyListener {
     public boolean startScreen = false;
     public boolean cookScreen = false;
     public boolean finalScreen = true;
+
+    public String gordonMessage = "";
 
 
     ArrayList<String> ingredientsInSandwich = new ArrayList<String>();
