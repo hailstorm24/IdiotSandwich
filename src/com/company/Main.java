@@ -51,17 +51,17 @@ public class Main implements Runnable, KeyListener {
     }
 
 
-    public void moveThings()
-    {
-
-    }
-
     public void pause(int time ){
         try {
             Thread.sleep(time);
         } catch (InterruptedException e) {
 
         }
+    }
+
+    public void moveThings()
+    {
+
     }
 
     private void setUpGraphics() {
@@ -97,11 +97,7 @@ public class Main implements Runnable, KeyListener {
         g = (Graphics2D) bufferStrategy.getDrawGraphics();
 
         System.out.println("DONE graphic setup");
-
-
-
     }
-
 
     public String gordonMessage(ArrayList ingredients){
         return ("Oh, for heaven's sake! What is this? A sandwich or a salad in disguise? Where's the substance? Where's the flavor? It's like a dull symphony with only two notes! Tomatoes and lettuce do not a sandwich make. And this... points at baguette This baguette is as soft as a pillow! It's meant to have crunch, texture, character! It's like eating air! If you want to make a sandwich, you've got to put some heart into it! Add some protein, some cheese, a bit of sauce perhaps! Give it some depth, some personality! Otherwise, it's just a sad excuse for a meal. Disappointing!\n");
@@ -113,11 +109,21 @@ public class Main implements Runnable, KeyListener {
     }
 
     public void renderCookScreen() {
-        for (int x = 0; x < 500; x += 180) {
-            for (int y = 0; y < 700; y += 150) {
-                g.drawRect(100 + x, 0 + y, 100, 100);
+        Graphics g = bufferStrategy.getDrawGraphics();
+        g.clearRect(0, 0, frame.getWidth(), frame.getHeight());
+
+        int boxWidth = (frame.getWidth() - 510) / 3;
+        int boxHeight = frame.getHeight() / 5;
+
+        for (int row = 0; row < 5; row++) {
+            for (int col = 0; col < 3; col++) {
+                int x = 510 + col * boxWidth;
+                int y = row * boxHeight;
+                g.drawRect(x, y, boxWidth, boxHeight);
             }
         }
+
+        g.drawLine(508, 0, 508, frame.getHeight());
 
     }
 
