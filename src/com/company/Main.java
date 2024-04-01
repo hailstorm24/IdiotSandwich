@@ -48,10 +48,8 @@ public class Main implements Runnable, KeyListener, MouseListener {
     }
 
     public Main() {
-            File imagePath = new File("/Users/hailstorm/IdeaProjects/idiotSandwich/IdiotSandwich/start_screen.png");
-        System.out.println("Current working directory: " + new File(".").getAbsolutePath());
-        StartScreen = Toolkit.getDefaultToolkit().getImage("start_screen.png");
-        try {
+            File imagePath = new File(new File(".").getAbsolutePath()+"/start_screen.png");
+            try {
                 // Adjust the path as per your file location
                 if (imagePath.exists()) {
                     StartScreen = ImageIO.read(imagePath);
