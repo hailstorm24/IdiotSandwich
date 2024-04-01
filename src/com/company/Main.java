@@ -103,6 +103,9 @@ public class Main implements Runnable, KeyListener {
     }
 
 
+    public String gordonMessage(ArrayList ingredients){
+        return ("Oh, for heaven's sake! What is this? A sandwich or a salad in disguise? Where's the substance? Where's the flavor? It's like a dull symphony with only two notes! Tomatoes and lettuce do not a sandwich make. And this... points at baguette This baguette is as soft as a pillow! It's meant to have crunch, texture, character! It's like eating air! If you want to make a sandwich, you've got to put some heart into it! Add some protein, some cheese, a bit of sauce perhaps! Give it some depth, some personality! Otherwise, it's just a sad excuse for a meal. Disappointing!\n");
+    }
 
 
     public void renderStartScreen(){
