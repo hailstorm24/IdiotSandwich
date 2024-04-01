@@ -1,24 +1,26 @@
 package com.company;
-import java.awt.Graphics2D;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.image.BufferStrategy;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import java.util.ArrayList;
+import java.awt.event.*;
+import java.awt.image.BufferStrategy;
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
-import java.io.IOException;
+import java.util.ArrayList;
 
 
 
-public class Main implements Runnable, KeyListener {
+
+public class Main implements Runnable, KeyListener, MouseListener {
     final int WIDTH = 1000;
     final int HEIGHT = 700;
 
@@ -28,24 +30,43 @@ public class Main implements Runnable, KeyListener {
 
     public BufferStrategy bufferStrategy;
     public Graphics2D g;
-    public boolean startScreen = false;
+    public boolean startScreen = true;
     public boolean cookScreen = false;
-    public boolean finalScreen = true;
+    public boolean finalScreen = false;
+    public Image StartScreen;
+    public Rectangle mouseRec;
+
 
     public String gordonMessage = "";
 
 
-    ArrayList<String> ingredientsInSandwich = new ArrayList<String>();
+    public ArrayList<String> ingredientsInSandwich = new ArrayList<String>();
 
     public static void main(String[] args) {
         Main ex = new Main();
         new Thread(ex).start();
-        String prompt = "Translate 'Hello, world!' to Spanish.";
-        queryGptApi(prompt);
     }
 
     public Main() {
+            File imagePath = new File("/Users/hailstorm/IdeaProjects/idiotSandwich/IdiotSandwich/start_screen.png");
+        System.out.println("Current working directory: " + new File(".").getAbsolutePath());
+        StartScreen = Toolkit.getDefaultToolkit().getImage("start_screen.png");
+        try {
+                // Adjust the path as per your file location
+                if (imagePath.exists()) {
+                    StartScreen = ImageIO.read(imagePath);
+                } else {
+                    System.out.println("File not found at specified path: " + imagePath.getAbsolutePath());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("Failed to load start screen image.");
 
+            }
+        ingredientsInSandwich.add("Tomatoes");
+        ingredientsInSandwich.add("Tomatoes");
+
+//        System.out.println(gordonMessage(ingredientsInSandwich));
         setUpGraphics();
 
     }
@@ -72,42 +93,36 @@ public class Main implements Runnable, KeyListener {
 
     }
 
-    private void setUpGraphics() {
-        frame = new JFrame("Application Template");
-        panel = (JPanel) frame.getContentPane();
-        panel.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-        panel.setLayout(null);
-
-        canvas = new Canvas();
-        canvas.setBounds(0, 0, WIDTH, HEIGHT);
-        canvas.setIgnoreRepaint(true);
-
-        panel.add(canvas);
-
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setResizable(true);
-        frame.setVisible(true);
-
-        canvas.createBufferStrategy(2);
-        bufferStrategy = canvas.getBufferStrategy();
-        canvas.requestFocus();
-        canvas.addKeyListener(this);
-
-        frame.addComponentListener(new ComponentAdapter()
-        {
+    private void setUpGraphics() {        this.frame = new JFrame("Application Template");
+        this.panel = (JPanel)this.frame.getContentPane();
+        this.panel.setPreferredSize(new Dimension(1000, 700));
+        this.panel.setLayout((LayoutManager)null);
+        this.canvas = new Canvas();
+        this.canvas.setBounds(0, 0, 1000, 700);
+        this.canvas.setIgnoreRepaint(true);
+        this.panel.add(this.canvas);
+        this.frame.setDefaultCloseOperation(3);
+        this.frame.pack();
+        this.frame.setResizable(true);
+        this.frame.setVisible(true);
+        this.canvas.createBufferStrategy(2);
+        this.bufferStrategy = this.canvas.getBufferStrategy();
+        this.canvas.requestFocus();
+        this.canvas.addKeyListener(this);
+        this.canvas.addMouseListener(this);
+        this.frame.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent evt) {
                 Component c = (Component)evt.getSource();
-                canvas.setBounds(0,0,frame.getWidth(),frame.getHeight());
+                Main.this.canvas.setBounds(0, 0, Main.this.frame.getWidth(), Main.this.frame.getHeight());
             }
         });
-
-        g = (Graphics2D) bufferStrategy.getDrawGraphics();
-
+        this.g = (Graphics2D)this.bufferStrategy.getDrawGraphics();
+        this.mouseRec = new Rectangle(-110, 0, 0, 0);
         System.out.println("DONE graphic setup");
     }
 
-    public static void queryGptApi(String prompt) {
+
+    public String queryGptApi(String prompt) {
         // Your API key from OpenAI
         String apiKey = "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";
 
@@ -125,20 +140,29 @@ public class Main implements Runnable, KeyListener {
         try {
             // Send the request and receive the response
             HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
-            return (response.body()["choices"][0]["message"]["content"]);
-        } catch (IOException | InterruptedException e) {
+            JSONObject jsonResponse = new JSONObject(response.body());
+            // Navigate through the JSON to extract the desired content
+            String content = jsonResponse.getJSONArray("choices").getJSONObject(0).getJSONObject("message").getString("content");
+            return content;
+        } catch (IOException | InterruptedException | JSONException e) {
             e.printStackTrace();
         }
+        return "";
     }
 
 
     public String gordonMessage(ArrayList ingredients){
-        return ("Oh, for heaven's sake! What is this? A sandwich or a salad in disguise? Where's the substance? Where's the flavor? It's like a dull symphony with only two notes! Tomatoes and lettuce do not a sandwich make. And this... points at baguette This baguette is as soft as a pillow! It's meant to have crunch, texture, character! It's like eating air! If you want to make a sandwich, you've got to put some heart into it! Add some protein, some cheese, a bit of sauce perhaps! Give it some depth, some personality! Otherwise, it's just a sad excuse for a meal. Disappointing!\n");
+        String prompt = "You are Gordon Ramsay. You are presented with a plate that, in a stack from bottom to top, contains: ";
+        for (Object item:ingredients){
+            prompt += ((String)item+", ");
+        }
+        prompt += "and nothing else. Critique the sandwich.";
+        System.out.println(prompt);
+        return (queryGptApi(prompt));
     }
 
-
     public void renderStartScreen(){
-        g.drawRect(100,100,100,100);
+        g.drawImage(StartScreen, 0,0,1000, 700,null);
     }
 
     public void renderCookScreen() {
@@ -167,6 +191,7 @@ public class Main implements Runnable, KeyListener {
         g.clearRect(0, 0, frame.getWidth(), frame.getHeight());
 
         if(startScreen){
+            g.drawImage(StartScreen, 0,0,1000, 700,null);
             renderStartScreen();
         }
         if(cookScreen){
@@ -193,6 +218,39 @@ public class Main implements Runnable, KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
+
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        if(startScreen) {
+            System.out.println("oooo");
+            int xhold = e.getX();
+            int yhold = e.getY();
+            System.out.println(xhold);
+            this.mouseRec = new Rectangle(xhold, yhold, 1, 1);
+            this.startScreen = false;
+            this.cookScreen = true;
+        }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
 
     }
 }
