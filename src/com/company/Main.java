@@ -10,7 +10,6 @@ import java.awt.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-// this is a change
 
 public class Main implements Runnable, KeyListener {
     final int WIDTH = 1000;
@@ -21,6 +20,9 @@ public class Main implements Runnable, KeyListener {
     public JPanel panel;
 
     public BufferStrategy bufferStrategy;
+    public Graphics2D g;
+    public boolean startScreen = true;
+
 
     public static void main(String[] args) {
         Main ex = new Main();
@@ -85,15 +87,25 @@ public class Main implements Runnable, KeyListener {
             }
         });
 
+        g = (Graphics2D) bufferStrategy.getDrawGraphics();
+
         System.out.println("DONE graphic setup");
+
 
 
     }
 
+    public void renderStartScreen(){
+        g.drawRect(100,100,100,100);
+    }
+
 
     private void render() {
-        Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
         g.clearRect(0, 0, frame.getWidth(), frame.getHeight());
+
+        if(startScreen){
+            renderStartScreen();
+        }
         g.dispose();
 
         bufferStrategy.show();
