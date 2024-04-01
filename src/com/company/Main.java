@@ -6,9 +6,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 import java.awt.*;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import java.util.ArrayList;
+
 
 
 public class Main implements Runnable, KeyListener {
@@ -18,6 +18,10 @@ public class Main implements Runnable, KeyListener {
     public JFrame frame;
     public Canvas canvas;
     public JPanel panel;
+
+    private JFrame cookScreenFrame;
+    private JButton tomatoButton;
+
 
     public BufferStrategy bufferStrategy;
     public Graphics2D g;
@@ -33,6 +37,7 @@ public class Main implements Runnable, KeyListener {
     public static void main(String[] args) {
         Main ex = new Main();
         new Thread(ex).start();
+
     }
 
     public Main() {
@@ -124,28 +129,44 @@ public class Main implements Runnable, KeyListener {
 
         g.drawLine(508, 0, 508, frame.getHeight());
 
+        JButton tomatoButton = new JButton("Tomato");
+        cookScreenFrame.add(tomatoButton);
+        cookScreenFrame.setVisible(true);
     }
 
     public void renderJudgeScreen() {
         g.drawRect(100,100,100,100);}
 
     private void render() {
+        Graphics g = bufferStrategy.getDrawGraphics();
         g.clearRect(0, 0, frame.getWidth(), frame.getHeight());
 
-        if(startScreen){
-            renderStartScreen();
-        }
-        if(cookScreen){
-           renderCookScreen();
-        }
-        if(finalScreen){
-            renderJudgeScreen();
+        int boxWidth = (frame.getWidth() - 510) / 3;
+        int boxHeight = frame.getHeight() / 5;
+
+        for (int row = 0; row < 5; row++) {
+            for (int col = 0; col < 3; col++) {
+                int x = 510 + col * boxWidth;
+                int y = row * boxHeight;
+                g.drawRect(x, y, boxWidth, boxHeight);
+            }
         }
 
-        g.dispose();
+
+        g.drawLine(508, 0, 508, frame.getHeight());
 
         bufferStrategy.show();
+        g.dispose();
     }
+
+
+
+
+
+
+
+
+
 
     @Override
     public void keyTyped(KeyEvent e) {
