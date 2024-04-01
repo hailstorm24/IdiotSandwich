@@ -9,6 +9,13 @@ import java.awt.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.util.ArrayList;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.http.HttpResponse.BodyHandlers;
+import java.io.IOException;
+
 
 
 public class Main implements Runnable, KeyListener {
@@ -33,6 +40,8 @@ public class Main implements Runnable, KeyListener {
     public static void main(String[] args) {
         Main ex = new Main();
         new Thread(ex).start();
+        String prompt = "Translate 'Hello, world!' to Spanish.";
+        queryGptApi(prompt);
     }
 
     public Main() {
@@ -97,6 +106,31 @@ public class Main implements Runnable, KeyListener {
 
         System.out.println("DONE graphic setup");
     }
+
+    public static void queryGptApi(String prompt) {
+        // Your API key from OpenAI
+        String apiKey = "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";
+
+        // Setup the HttpClient
+        HttpClient client = HttpClient.newHttpClient();
+
+        // Setup the HttpRequest
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("https://api.openai.com/v1/chat/completions"))
+                .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + apiKey)
+                .POST(HttpRequest.BodyPublishers.ofString("{\"model\": \"gpt-3.5-turbo\", \"messages\": [{\"role\": \"user\", \"content\": \"" + prompt + "\"}]}"))
+                .build();
+
+        try {
+            // Send the request and receive the response
+            HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
+            return (response.body()["choices"][0]["message"]["content"]);
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public String gordonMessage(ArrayList ingredients){
         return ("Oh, for heaven's sake! What is this? A sandwich or a salad in disguise? Where's the substance? Where's the flavor? It's like a dull symphony with only two notes! Tomatoes and lettuce do not a sandwich make. And this... points at baguette This baguette is as soft as a pillow! It's meant to have crunch, texture, character! It's like eating air! If you want to make a sandwich, you've got to put some heart into it! Add some protein, some cheese, a bit of sauce perhaps! Give it some depth, some personality! Otherwise, it's just a sad excuse for a meal. Disappointing!\n");
