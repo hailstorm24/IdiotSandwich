@@ -10,6 +10,8 @@ import java.awt.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import java.util.ArrayList;
+
 
 public class Main implements Runnable, KeyListener {
     final int WIDTH = 1000;
@@ -24,6 +26,7 @@ public class Main implements Runnable, KeyListener {
     public boolean startScreen = true;
     public boolean cookScreen = false;
 
+    ArrayList<String> ingredientsInSandwich = new ArrayList<String>();
 
     public static void main(String[] args) {
         Main ex = new Main();
@@ -103,6 +106,9 @@ public class Main implements Runnable, KeyListener {
     public void renderCookScreen() {
         g.drawRect(100,100,100,100);
     }
+
+    public void renderJudgeScreen() {
+        g.drawRect(100,100,100,100);}
 
     private void render() {
         g.clearRect(0, 0, frame.getWidth(), frame.getHeight());
