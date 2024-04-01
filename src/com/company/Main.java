@@ -1,13 +1,17 @@
 package com.company;
 import java.awt.Graphics2D;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 import java.awt.image.BufferStrategy;
 import java.awt.*;
 import javax.swing.*;
 import java.util.ArrayList;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.http.HttpResponse.BodyHandlers;
+import java.io.IOException;
+
 
 
 
@@ -37,7 +41,6 @@ public class Main implements Runnable, KeyListener {
     public static void main(String[] args) {
         Main ex = new Main();
         new Thread(ex).start();
-
     }
 
     public Main() {
@@ -103,6 +106,8 @@ public class Main implements Runnable, KeyListener {
         System.out.println("DONE graphic setup");
     }
 
+
+
     public String gordonMessage(ArrayList ingredients){
         return ("Oh, for heaven's sake! What is this? A sandwich or a salad in disguise? Where's the substance? Where's the flavor? It's like a dull symphony with only two notes! Tomatoes and lettuce do not a sandwich make. And this... points at baguette This baguette is as soft as a pillow! It's meant to have crunch, texture, character! It's like eating air! If you want to make a sandwich, you've got to put some heart into it! Add some protein, some cheese, a bit of sauce perhaps! Give it some depth, some personality! Otherwise, it's just a sad excuse for a meal. Disappointing!\n");
     }
@@ -129,10 +134,12 @@ public class Main implements Runnable, KeyListener {
 
         g.drawLine(508, 0, 508, frame.getHeight());
 
-        JButton tomatoButton = new JButton("Tomato");
-        cookScreenFrame.add(tomatoButton);
-        cookScreenFrame.setVisible(true);
     }
+
+
+
+
+
 
     public void renderJudgeScreen() {
         g.drawRect(100,100,100,100);}
