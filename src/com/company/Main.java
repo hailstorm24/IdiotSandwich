@@ -26,7 +26,8 @@ public class Main implements Runnable, KeyListener {
     public BufferStrategy bufferStrategy;
     public Graphics2D g;
     public boolean startScreen = false;
-    public boolean cookScreen = true;
+    public boolean cookScreen = false;
+    public boolean finalScreen = true;
 
 
     ArrayList<String> ingredientsInSandwich = new ArrayList<String>();
@@ -136,11 +137,13 @@ public class Main implements Runnable, KeyListener {
         if(startScreen){
             renderStartScreen();
         }
-        g.dispose();
-
         if(cookScreen){
            renderCookScreen();
         }
+        if(finalScreen){
+            renderJudgeScreen();
+        }
+
         g.dispose();
 
         bufferStrategy.show();
