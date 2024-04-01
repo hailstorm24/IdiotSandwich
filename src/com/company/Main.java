@@ -137,7 +137,7 @@ public class Main implements Runnable, KeyListener, MouseListener {
 
     }
 
-    private void setUpGraphics() {        this.frame = new JFrame("Application Template");
+    private void setUpGraphics() {        this.frame = new JFrame("Idiot Sandwich");
         this.panel = (JPanel)this.frame.getContentPane();
         this.panel.setPreferredSize(new Dimension(1000, 700));
         this.panel.setLayout((LayoutManager)null);
