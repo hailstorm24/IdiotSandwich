@@ -34,6 +34,8 @@ public class Main implements Runnable, KeyListener, MouseListener {
     public boolean cookScreen = false;
     public boolean finalScreen = false;
     public Image StartScreen;
+    public Image CookScreen;
+
     public Rectangle mouseRec;
 
 
@@ -42,25 +44,14 @@ public class Main implements Runnable, KeyListener, MouseListener {
 
     public ArrayList<String> ingredientsInSandwich = new ArrayList<String>();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Main ex = new Main();
         new Thread(ex).start();
     }
 
-    public Main() {
-            File imagePath = new File(new File(".").getAbsolutePath()+"/start_screen.png");
-            try {
-                // Adjust the path as per your file location
-                if (imagePath.exists()) {
-                    StartScreen = ImageIO.read(imagePath);
-                } else {
-                    System.out.println("File not found at specified path: " + imagePath.getAbsolutePath());
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-                System.out.println("Failed to load start screen image.");
-
-            }
+    public Main() throws IOException {
+        StartScreen = ImageIO.read(new File(new File(".").getAbsolutePath() + "/start_screen.png"));
+        CookScreen = ImageIO.read(new File(new File(".").getAbsolutePath() +"/kitchen-21.png"));
         ingredientsInSandwich.add("Tomatoes");
         ingredientsInSandwich.add("Tomatoes");
 
@@ -164,21 +155,21 @@ public class Main implements Runnable, KeyListener, MouseListener {
     }
 
     public void renderCookScreen() {
-        Graphics g = bufferStrategy.getDrawGraphics();
         g.clearRect(0, 0, frame.getWidth(), frame.getHeight());
+        g.drawImage(CookScreen, 0,0,1000, 700,null);
 
-        int boxWidth = (frame.getWidth() - 510) / 3;
-        int boxHeight = frame.getHeight() / 5;
-
-        for (int row = 0; row < 5; row++) {
-            for (int col = 0; col < 3; col++) {
-                int x = 510 + col * boxWidth;
-                int y = row * boxHeight;
-                g.drawRect(x, y, boxWidth, boxHeight);
-            }
-        }
-
-        g.drawLine(508, 0, 508, frame.getHeight());
+//        int boxWidth = (frame.getWidth() - 510) / 3;
+//        int boxHeight = frame.getHeight() / 5;
+//
+//        for (int row = 0; row < 5; row++) {
+//            for (int col = 0; col < 3; col++) {
+//                int x = 510 + col * boxWidth;
+//                int y = row * boxHeight;
+//                g.drawRect(x, y, boxWidth, boxHeight);
+//            }
+//        }
+//
+//        g.drawLine(508, 0, 508, frame.getHeight());
 
     }
 
@@ -186,14 +177,16 @@ public class Main implements Runnable, KeyListener, MouseListener {
         g.drawRect(100,100,100,100);}
 
     private void render() {
+        Graphics2D g = (Graphics2D)this.bufferStrategy.getDrawGraphics();
+        g.clearRect(0, 0, 1000, 700);
         g.clearRect(0, 0, frame.getWidth(), frame.getHeight());
 
         if(startScreen){
-            g.drawImage(StartScreen, 0,0,1000, 700,null);
             renderStartScreen();
         }
         if(cookScreen){
-           renderCookScreen();
+//            g.drawImage(CookScreen, 0,0,1000, 700,null);
+            renderCookScreen();
         }
         if(finalScreen){
             renderJudgeScreen();
