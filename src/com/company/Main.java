@@ -247,7 +247,7 @@ public class Main implements Runnable, KeyListener, MouseListener {
 
     public void renderJudgeScreen() {
         g.drawImage(yelp, 0,0,1000, 700,null);
-        drawWrappedText(g, gordonMessage, 300, 250, 400);
+        drawWrappedText(g, gordonMessage, 300, 230, 450);
     }
 
     private void render() {
