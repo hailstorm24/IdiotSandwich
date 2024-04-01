@@ -2,13 +2,7 @@ package com.company;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import javax.swing.*;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.FontMetrics;
-import java.awt.Rectangle;
 
-import java.awt.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -125,7 +119,7 @@ public class Main implements Runnable, KeyListener, MouseListener {
         while (true) {
             moveThings();
             render();
-            pause(20);
+            pause(5);
         }
     }
 
@@ -229,7 +223,7 @@ public class Main implements Runnable, KeyListener, MouseListener {
         for (Object item:ingredients){
             prompt += ((String)item+", ");
         }
-        prompt += "and nothing else. Critique the sandwich.";
+        prompt += "and nothing else. Critique the sandwich. Be as creative as possible, and make sure to call the chef an 'idiot sandwich'";
         System.out.println(prompt);
         return (queryGptApi(prompt));
     }
@@ -292,7 +286,7 @@ public class Main implements Runnable, KeyListener, MouseListener {
     }
 
     @Override
-    public void mouseClicked(MouseEvent e) {
+    public void mouseReleased(MouseEvent e) {
         if (startScreen) {
             int xhold = e.getX();
             int yhold = e.getY();
@@ -377,7 +371,7 @@ public class Main implements Runnable, KeyListener, MouseListener {
     }
 
     @Override
-    public void mouseReleased(MouseEvent e) {
+    public void mouseClicked(MouseEvent e) {
 
     }
 
